@@ -1,0 +1,16 @@
+..\..\output\tim.o: ..\..\BSP\tim.c
+..\..\output\tim.o: ..\..\BSP\tim.h
+..\..\output\tim.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\tim.o: ..\..\Libraries\CMSIS\core_cm3.h
+..\..\output\tim.o: C:\KEIL_\KEIL\ARM\ARMCC\Bin\..\include\stdint.h
+..\..\output\tim.o: ..\..\Libraries\CMSIS\system_stm32f10x.h
+..\..\output\tim.o: ..\..\User\stm32f10x_conf.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\stm32f10x_gpio.h
+..\..\output\tim.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\stm32f10x_rcc.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\stm32f10x_usart.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\misc.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\stm32f10x_tim.h
+..\..\output\tim.o: ..\..\BSP\adc_detect.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\stm32f10x_adc.h
+..\..\output\tim.o: ..\..\Libraries\FWlib\inc\stm32f10x_dma.h

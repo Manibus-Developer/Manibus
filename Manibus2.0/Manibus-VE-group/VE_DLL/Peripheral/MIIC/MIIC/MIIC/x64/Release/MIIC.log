@@ -1,0 +1,14 @@
+﻿  stdafx.cpp
+  dllmain.cpp
+  MIIC.cpp
+MIIC.cpp(27): warning C4309: “=”: 截断常量值
+MIIC.cpp(28): warning C4309: “=”: 截断常量值
+MIIC.cpp(53): warning C4309: “=”: 截断常量值
+MIIC.cpp(66): warning C4309: “=”: 截断常量值
+MIIC.cpp(67): warning C4309: “=”: 截断常量值
+MIIC.cpp(82): warning C4309: “=”: 截断常量值
+    正在创建库 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MIIC\MIIC\x64\Release\MIIC.lib 和对象 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MIIC\MIIC\x64\Release\MIIC.exp
+  正在生成代码
+  All 9 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  MIIC.vcxproj -> C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MIIC\MIIC\x64\Release\MIIC.dll

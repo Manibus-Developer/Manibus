@@ -1,0 +1,15 @@
+..\..\output\24cxx.o: ..\..\Handware\24CXX\24cxx.c
+..\..\output\24cxx.o: ..\..\Handware\24CXX\24cxx.h
+..\..\output\24cxx.o: ..\..\Handware\IIC\myiic.h
+..\..\output\24cxx.o: ..\..\BSP\sys.h
+..\..\output\24cxx.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\24cxx.o: ..\..\Libraries\CMSIS\core_cm3.h
+..\..\output\24cxx.o: C:\KEIL_\KEIL\ARM\ARMCC\Bin\..\include\stdint.h
+..\..\output\24cxx.o: ..\..\Libraries\CMSIS\system_stm32f10x.h
+..\..\output\24cxx.o: ..\..\User\stm32f10x_conf.h
+..\..\output\24cxx.o: ..\..\Libraries\FWlib\inc\stm32f10x_gpio.h
+..\..\output\24cxx.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\24cxx.o: ..\..\Libraries\FWlib\inc\stm32f10x_rcc.h
+..\..\output\24cxx.o: ..\..\Libraries\FWlib\inc\stm32f10x_usart.h
+..\..\output\24cxx.o: ..\..\Libraries\FWlib\inc\misc.h
+..\..\output\24cxx.o: ..\..\BSP\delay.h

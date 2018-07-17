@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+  dllmain.cpp
+  MPWM.cpp
+    正在创建库 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MPWM\MPWM\x64\Release\MPWM.lib 和对象 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MPWM\MPWM\x64\Release\MPWM.exp
+  正在生成代码
+  All 22 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  MPWM.vcxproj -> C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MPWM\MPWM\x64\Release\MPWM.dll

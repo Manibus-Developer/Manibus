@@ -1,0 +1,13 @@
+..\..\output\hx711.o: ..\..\App\hx711.c
+..\..\output\hx711.o: ..\..\App\hx711.h
+..\..\output\hx711.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\hx711.o: ..\..\Libraries\CMSIS\core_cm3.h
+..\..\output\hx711.o: C:\KEIL_\KEIL\ARM\ARMCC\Bin\..\include\stdint.h
+..\..\output\hx711.o: ..\..\Libraries\CMSIS\system_stm32f10x.h
+..\..\output\hx711.o: ..\..\User\stm32f10x_conf.h
+..\..\output\hx711.o: ..\..\Libraries\FWlib\inc\stm32f10x_gpio.h
+..\..\output\hx711.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\hx711.o: ..\..\Libraries\FWlib\inc\stm32f10x_rcc.h
+..\..\output\hx711.o: ..\..\Libraries\FWlib\inc\stm32f10x_usart.h
+..\..\output\hx711.o: ..\..\Libraries\FWlib\inc\misc.h
+..\..\output\hx711.o: ..\..\BSP\delay.h

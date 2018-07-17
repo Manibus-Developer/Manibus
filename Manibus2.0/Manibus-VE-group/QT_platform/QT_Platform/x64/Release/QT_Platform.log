@@ -1,0 +1,18 @@
+﻿  Moc'ing QT_Platform.h...
+  Rcc'ing QT_Platform.qrc...
+  Uic'ing QT_Platform.ui...
+  RCC: Warning: No resources in 'C:\Users\17973\Desktop\Manibus\Manibus-VE-group\QT_platform\QT_Platform\QT_Platform.qrc'.
+  main.cpp
+  QT_Platform.cpp
+  moc_QT_Platform.cpp
+  qrc_QT_Platform.cpp
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(153): warning C4715: “choose_IO”: 不是所有的控件路径都返回值
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(219): warning C4715: “shooseMode”: 不是所有的控件路径都返回值
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(240): warning C4715: “choose_PWM”: 不是所有的控件路径都返回值
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(262): warning C4715: “choose_Channel”: 不是所有的控件路径都返回值
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(305): warning C4715: “choose_ADC”: 不是所有的控件路径都返回值
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(194): warning C4715: “choose_Pin”: 不是所有的控件路径都返回值
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(588): warning C4700: 使用了未初始化的局部变量“temp”
+c:\users\17973\desktop\manibus\manibus-ve-group\qt_platform\qt_platform\qt_platform.cpp(612): warning C4700: 使用了未初始化的局部变量“temp”
+    正在创建库 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\QT_platform\x64\Release\QT_Platform.lib 和对象 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\QT_platform\x64\Release\QT_Platform.exp
+  QT_Platform.vcxproj -> C:\Users\17973\Desktop\Manibus\Manibus-VE-group\QT_platform\x64\Release\QT_Platform.exe

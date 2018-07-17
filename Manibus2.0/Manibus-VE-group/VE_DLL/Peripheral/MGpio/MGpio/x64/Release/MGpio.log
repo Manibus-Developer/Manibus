@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+  dllmain.cpp
+  MGpio.cpp
+    正在创建库 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MGpio\x64\Release\MGpio.lib 和对象 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MGpio\x64\Release\MGpio.exp
+  正在生成代码
+  All 16 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  MGpio.vcxproj -> C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MGpio\x64\Release\MGpio.dll

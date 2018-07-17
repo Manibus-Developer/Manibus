@@ -1,0 +1,14 @@
+..\..\output\ctiic.o: ..\..\Handware\TOUCH\ctiic.c
+..\..\output\ctiic.o: ..\..\Handware\TOUCH\ctiic.h
+..\..\output\ctiic.o: ..\..\BSP\sys.h
+..\..\output\ctiic.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\ctiic.o: ..\..\Libraries\CMSIS\core_cm3.h
+..\..\output\ctiic.o: C:\KEIL_\KEIL\ARM\ARMCC\Bin\..\include\stdint.h
+..\..\output\ctiic.o: ..\..\Libraries\CMSIS\system_stm32f10x.h
+..\..\output\ctiic.o: ..\..\User\stm32f10x_conf.h
+..\..\output\ctiic.o: ..\..\Libraries\FWlib\inc\stm32f10x_gpio.h
+..\..\output\ctiic.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\ctiic.o: ..\..\Libraries\FWlib\inc\stm32f10x_rcc.h
+..\..\output\ctiic.o: ..\..\Libraries\FWlib\inc\stm32f10x_usart.h
+..\..\output\ctiic.o: ..\..\Libraries\FWlib\inc\misc.h
+..\..\output\ctiic.o: ..\..\BSP\delay.h

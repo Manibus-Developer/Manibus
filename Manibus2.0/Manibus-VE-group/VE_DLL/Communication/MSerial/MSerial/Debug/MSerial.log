@@ -1,0 +1,5 @@
+﻿  stdafx.cpp
+  MSerial.cpp
+c:\users\17973\desktop\manibus\manibus-ve-group\ve_dll\mserial\mserial\mserial.cpp(6): fatal error C1010: 在查找预编译头时遇到意外的文件结尾。是否忘记了向源中添加“#include "stdafx.h"”?
+  dllmain.cpp
+  正在生成代码...

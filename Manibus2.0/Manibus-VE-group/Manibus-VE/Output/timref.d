@@ -1,0 +1,13 @@
+..\..\output\timref.o: ..\..\SYS\timref.c
+..\..\output\timref.o: ..\..\SYS\timref.h
+..\..\output\timref.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\timref.o: ..\..\Libraries\CMSIS\core_cm3.h
+..\..\output\timref.o: C:\KEIL_\KEIL\ARM\ARMCC\Bin\..\include\stdint.h
+..\..\output\timref.o: ..\..\Libraries\CMSIS\system_stm32f10x.h
+..\..\output\timref.o: ..\..\User\stm32f10x_conf.h
+..\..\output\timref.o: ..\..\Libraries\FWlib\inc\stm32f10x_gpio.h
+..\..\output\timref.o: ..\..\Libraries\CMSIS\stm32f10x.h
+..\..\output\timref.o: ..\..\Libraries\FWlib\inc\stm32f10x_rcc.h
+..\..\output\timref.o: ..\..\Libraries\FWlib\inc\stm32f10x_usart.h
+..\..\output\timref.o: ..\..\Libraries\FWlib\inc\misc.h
+..\..\output\timref.o: ..\..\Libraries\FWlib\inc\stm32f10x_tim.h
