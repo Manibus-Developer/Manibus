@@ -11,4 +11,4 @@ The computer program controls the single-chip microcomputer by serial port, Blue
 
 ## Our expectations  
 
-We hope that everyone can find a simple way between the upper computer and the lower computer control, to avoid writing the lower computer program and communication protocol every time. This is often encountered in our embedded work, and we think that Manibus will be a very good open source protocol. It can be used in the fields of instrument control, robot control, automation equipment, and teaching equipment.
+We hope that everyone can find a simple way between the upper computer and the lower computer control, to avoid writing the lower computer program and communication protocol every time. This is often encountered in our embedded work, and we think that Manibus will be a very good open source protocol. The platform we are based on is STM32F103VET6.Of course, other microcontrollers can also be used.It can be used in the fields of instrument control, robot control, automation equipment, and teaching equipment.
