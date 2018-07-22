@@ -22,8 +22,10 @@ void Msg_Filtrate(void){             //主线程执行函数
 	
     unsigned char Tmp;
 	  unsigned char dir;
+	  char choState = CHO_RIGHT;
 	
 if(DataBuffer.DataSize>DATA_GET_LIMIT){
+
 	
 	  LoopList_GetOneData(&DataBuffer,&Tmp);
 		
@@ -34,31 +36,38 @@ if(DataBuffer.DataSize>DATA_GET_LIMIT){
 			switch(dir){
 				
 				case 0x0E/*IO*/ :			    
-        	cho_io();				
+        	  choState = cho_io();				
 					break;
 				
 				case 0x0A/*USART*/:
-					  cho_usart();			
+					  choState = cho_usart();			
 				break;
 				
 				
 				case 0x0C/*ADC*/:
-					  cho_adc();
+					  choState = cho_adc();
 				break;
 				
 				
 				case 0x0D /*PWM*/:
-					  cho_pwm();
+					  choState = cho_pwm();
 					break;
 				
 				case 0x0B /*IIC*/:
-					  cho_iic();
+					  choState = cho_iic();
 				break;	
 				
         case 0x09/*Wifi*/:
-        		cho_wifi();
+        		choState = cho_wifi();
          break;				
 			 }
+			
+			 
+			  if(choState ==CHO_ERROR){			  //防止函数出错，会传递到其他通讯对象		
+					USART1_Channel_FLAG =0x00;
+					WIFI_Channel_FLAG =0x00;
+				}
+			 
 	  	}else{
 		return;
 		}
@@ -66,19 +75,31 @@ if(DataBuffer.DataSize>DATA_GET_LIMIT){
 }
 
 void msg_feedback(uint8_t byte){
-	
+	  
 	  if(USART1_Channel_FLAG){
 			
 			//Usart_ReadArray_(&byte,1);
 			Usart_SendByte_(USART1,byte);  //暂时不使用DMA发送
-	     USART1_Channel_FLAG = 0x00;   //这类放到结尾置0
-	   }
-		
-	  if(WIFI_Channel_FLAG){
+	    USART1_Channel_FLAG = 0x00;   //这类放到结尾置0
+			
+	   }else if(WIFI_Channel_FLAG){
 			
 			pWifiRead_(&byte,1);
 			WIFI_Channel_FLAG = 0x00;
 		}
+		
+}
+
+void msg_feedback_ID(uint8_t byte){
+	
+		  if(USART1_Channel_FLAG){
+			
+			Usart_SendByte_(USART1,byte);  //暂时不使用DMA发送
+	   }else if(WIFI_Channel_FLAG){
+			
+			pWifiRead_(&byte,1);
+
+		}	
 }
 
 
@@ -102,7 +123,7 @@ bool ParamsCheckOut(unsigned short sum,unsigned short count,unsigned char compar
 
 
 
-void cho_io(void){      //已确认
+char cho_io(void){      //已确认
 	  
     unsigned char Tmp;
 	  unsigned char Tmp1;
@@ -113,11 +134,9 @@ void cho_io(void){      //已确认
 	  unsigned short paramsCount = 0;
 	  
 	  LoopList_ReadFeature io_feature;
-	  
+		io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
 	
   	LoopList_GetOneData(&DataBuffer,&dir);
-	
-	  io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
 	
 	  LoopList_GetOneData(&DataBuffer,&Tmp);  //这里得到端口
 	  u32_param[0] = APB2PERIPH_BASE|(Tmp<<8);
@@ -139,21 +158,23 @@ void cho_io(void){      //已确认
 			
 			paramsCheck += Tmp;  paramsCount ++;
 			
-			if(u32_param[2] != 0x00 && u32_param[2] != 0x01) return;
+			if(u32_param[2] != 0x00 && u32_param[2] != 0x01) return CHO_ERROR;
 			
 
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;  
 			
 			
 		 	LoopList_GetOneData(&DataBuffer,&Tmp);	
 			 if(Tmp!= pPinOutPut__ID ){
 				 
 				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR;
 			 }	
 			 
-			 (*(u32(*)())usmart_nametab[4].func)(u32_param[0],u32_param[1],u32_param[2]);			 
+			 (*(u32(*)())usmart_nametab[4].func)(u32_param[0],u32_param[1],u32_param[2]);	
+			 msg_feedback_ID(pPinOutPut__ID); //返回ID
+			 
 			break;
 			 
 			case 0xDB:
@@ -164,15 +185,18 @@ void cho_io(void){      //已确认
 			paramsCheck += Tmp;  paramsCount ++;
 			
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
 			
 			LoopList_GetOneData(&DataBuffer,&Tmp); 
 		  if(Tmp!= pPinReadBit__ID ){
 				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR;
 			 }	
 			 
-			 (*(u32(*)())usmart_nametab[20].func)(u32_param[0],u32_param[1]); 
+			 (*(u32(*)())usmart_nametab[20].func)(u32_param[0],u32_param[1]);
+			 
+			 //msg_feedback_ID(pPinReadBit__ID);   //函数内已发送
+			 
 			break; 
 			 
 			case 0xCA:
@@ -189,40 +213,43 @@ void cho_io(void){      //已确认
 			paramsCheck += Tmp;  paramsCount ++;
 			
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
 			
 		  LoopList_GetOneData(&DataBuffer,&Tmp);	
 			 if(Tmp!= pPinInit__ID ){
 				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+				 
+			    return CHO_ERROR;
 			 }
 			 
 			(*(u32(*)())usmart_nametab[2].func)(u32_param[0],(uint16_t)u32_param[1],u32_param[2],u32_param[3]);	
-			
+			 msg_feedback_ID(pPinInit__ID);  //返回ID
+			 
 			break;
 			
 			case 0xAA:
 				
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
 			
 			 LoopList_GetOneData(&DataBuffer,&Tmp);
 			 if(Tmp!= pPinDeInit__ID ){
 				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR;
 			 }
 			 
 			 (*(u32(*)())usmart_nametab[3].func)(u32_param[0]);
-			 
+			  msg_feedback_ID(pPinDeInit__ID);  //返回ID
 		    break;
 			 
 			 default:	
-				  return;
+				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 
 		}
-		
+		  
 		  msg_feedback(IO_Check);    //结尾校验位
-		
+		  return CHO_RIGHT;
 }
 
 
@@ -245,7 +272,7 @@ unsigned int byteMsgSum(unsigned char *msg,unsigned short length){
      return sum;
 }
 
-void cho_usart(void){      //这里使用USART2或者UART4
+char cho_usart(void){      //这里使用USART2或者UART4
 	
 	
     unsigned char Tmp;
@@ -259,11 +286,11 @@ void cho_usart(void){      //这里使用USART2或者UART4
 		
 		unsigned short paramsCheck =0;  
 	  unsigned short paramsCount = 0;
-		LoopList_ReadFeature io_feature;
 		
+		LoopList_ReadFeature io_feature;		
+		io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
 		
 	  LoopList_GetOneData(&DataBuffer,&dir);
-	
 		
 		if(dir == 0xDC){ //这里为读取串口方式调用函数  特殊
 			
@@ -271,10 +298,12 @@ void cho_usart(void){      //这里使用USART2或者UART4
 			
 		if(Tmp!= pUsartOnLine__ID ){
 			
-			 return;
+			 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			 return CHO_ERROR;
 		}	
 			(*(u32(*)())usmart_nametab[37].func)();
-				return;      //这里不在到后面有反馈值
+		
+				return CHO_RIGHT;      //这里不在到后面有反馈值
 		}
 		
 		
@@ -291,7 +320,7 @@ void cho_usart(void){      //这里使用USART2或者UART4
 			  paramsCheck += Tmp;  paramsCount ++;	
 			  
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			  paramsCheck =0;paramsCount=0;
 			
 			  for(i=0;i<datalength;i++){
@@ -301,32 +330,33 @@ void cho_usart(void){      //这里使用USART2或者UART4
 				}
 
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return;
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 				
 				 LoopList_GetOneData(&DataBuffer,&Tmp);		
 			   if(Tmp!= pUsartWrite__ID ){
 					 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR;
 			   }
 				 
 				(*(u32(*)())usmart_nametab[7].func)(u32_param[0],pcOrder_data,datalength);			 
-			
+		  	msg_feedback_ID(pUsartWrite__ID);  //返回ID
+				 
 				break;
 				 
 			case 0xDB:
 				
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return;
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			
 				 LoopList_GetOneData(&DataBuffer,&Tmp);	
 			   if(Tmp!= pUsartRead__ID ){
 					 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR;
 			   }
 				 
 				 if(u32_param[0]==USART2_BASE){
 					 
-					  usart_param_check[0] = pUsartRead__ID ;
+					  usart_param_check[0] = pUsartRead__ID ;   //已经返回ID
 					  usart_param_check[1] = USART2_Check;	
 					 
 	         (*(u32(*)())usmart_nametab[8].func)(usart_param_check,2);  //USART2
@@ -337,7 +367,7 @@ void cho_usart(void){      //这里使用USART2或者UART4
 
 				}else if(u32_param[0]==UART4_BASE){
 					
-					  usart_param_check[0] = pUsartRead__ID;
+					  usart_param_check[0] = pUsartRead__ID;    //已经返回ID
 					  usart_param_check[1] = UART4_Check;	
 					
 			     (*(u32(*)())usmart_nametab[8].func)(usart_param_check,2);    //UART4
@@ -346,7 +376,7 @@ void cho_usart(void){      //这里使用USART2或者UART4
 											 
 					 				 
 		    }else{
-				return;
+				return CHO_ERROR;
 				}				
 
 				break;
@@ -382,115 +412,137 @@ void cho_usart(void){      //这里使用USART2或者UART4
 				 paramsCheck += Tmp;  paramsCount ++;
 				 
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return;
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 				 
 				 LoopList_GetOneData(&DataBuffer,&Tmp);
 			   if(Tmp!= pUsartInit__ID ){
 					 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR; 
 			   }
 			   
          (*(u32(*)())usmart_nametab[5].func)(u32_param[0],u32_param[1],u32_param[2],
 				  u32_param[3],u32_param[4],u32_param[5],u32_param[6],u32_param[7]);
-				 
+				 msg_feedback_ID(pUsartInit__ID);  //返回ID
 				break;
 				 
 			case 0xAA:		
 				
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return; 
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
 			
 				 LoopList_GetOneData(&DataBuffer,&Tmp);
 			   if(Tmp!= pUsartDeInit__ID ){
 					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
-			    return;
+			    return CHO_ERROR;
 			   }
 				 
 				 (*(u32(*)())usmart_nametab[6].func)(u32_param[0]);
-				 
+				 msg_feedback_ID(pUsartDeInit__ID);  //返回ID
 				break;
 				 
 			  default:	
-				  return;
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 		}
 		
 		msg_feedback(USART_Check);
+		return CHO_RIGHT;
 }
 
 
 
-void cho_adc(void){
+char cho_adc(void){
 
     uint8_t Tmp;
 	  uint8_t dir;
 	  uint32_t u32_param[MAX_PARAM];
 	  uint8_t u8_param[ADC_MAX];
 		uint8_t u8_param_length=0;
-		
+	
+		unsigned short paramsCheck =0;  
+	  unsigned short paramsCount = 0;
+		LoopList_ReadFeature io_feature;
+	  
 	  short i=0;
 	
-	  LoopList_GetOneData(&DataBuffer,&dir);
-
+	  io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
+	
+	  LoopList_GetOneData(&DataBuffer,&dir); 
+	
 	  switch(dir){
 			
 			case 0xDA:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  u32_param[0] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++;
+			  
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-			    return;
+			  if(Tmp!= pADCRead__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			  }
 				
 			  (*(u32(*)())usmart_nametab[11].func)((uint8_t)u32_param[0]);
-			  
+			   //msg_feedback_ID(pADCRead__ID);  //已经返回ID
 	  break;
 			
 			case 0xCA:
 				
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			
+				LoopList_GetOneData(&DataBuffer,&Tmp);	  
 			  u32_param[0] = Tmp<<12;
-			 
-			  for(i=0;i<ADC_MAX+1;i++){		
-					
-				LoopList_GetOneData(&DataBuffer,&Tmp);	
-					
-				if(i==ADC_MAX && Tmp!=0xA1){
-				return;
-				}							
-				if(Tmp==0xA1){
-				break;
-				} 
-			  	u8_param_length++;
-					u8_param[i] = Tmp; 	
-				}
-
-			  (*(u32(*)())usmart_nametab[9].func)(u32_param[0],u8_param,u8_param_length);
+				paramsCheck += Tmp;  paramsCount ++; 
+			
+			  LoopList_GetOneData(&DataBuffer,&Tmp);	
+				u8_param_length = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++;
+			
+			  for(i=0;i<u8_param_length;i++){
+				 LoopList_GetOneData(&DataBuffer,&Tmp);	
+			   u8_param[i] = Tmp;
+				 paramsCheck += Tmp;  paramsCount ++; 
+			  }
 				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+				
+				LoopList_GetOneData(&DataBuffer,&Tmp);
+			  if(Tmp!= pADCInit__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
+			  }
+				
+				
+			  (*(u32(*)())usmart_nametab[9].func)(u32_param[0],u8_param,u8_param_length);
+				 msg_feedback_ID(pADCInit__ID);  //返回ID
 			break;
 				
 		  	case 0xAA:
 					
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-				
-				if(Tmp!=0xA1){
-			    return;
+			  if(Tmp!= pADCDeInit__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			  }
+				 
 			   (*(u32(*)())usmart_nametab[10].func)();
-			
+		    	msg_feedback_ID(pADCDeInit__ID);  //返回ID
 			break;
 				
 			default:
-				
-				  return;				
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;				
 		 }
 		
-		 msg_feedback(ADC_Check_Last);
+		 msg_feedback(ADC_Check);
+		 
+		 return CHO_RIGHT;
 }
 
-void cho_pwm(void){
+char cho_pwm(void){
 	 
     unsigned char Tmp;
 	  unsigned char dir;
@@ -499,148 +551,227 @@ void cho_pwm(void){
 	  
 	  unsigned char TmpBfr2[2];
 	  uint16_t u16_param[3];
+	  
+	  unsigned short paramsCheck =0;  
+	  unsigned short paramsCount = 0;
+		LoopList_ReadFeature io_feature;
+	  unsigned char i=0 ;
+	  io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
 	
    	LoopList_GetOneData(&DataBuffer,&dir);
+	
 	  LoopList_GetOneData(&DataBuffer,&Tmp);
 	
-	   if(Tmp==0x34|Tmp==0x2c){
+	  if(Tmp==0x34|Tmp==0x2c){
 			 u32_param[0] = APB2PERIPH_BASE+(Tmp<<8);
 		 }else{
 		   u32_param[0] = APB1PERIPH_BASE+(Tmp<<8); 
 		 }
-    
+    paramsCheck += Tmp;  paramsCount ++;
+		 
 	  switch(dir){
 			
 			case 0xDA:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);		  
 			  u32_param[1] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++; 
+			
 			  LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);
 		  	u16_param[0] = *((uint16_t*)TmpBfr2);
+			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
+			
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);				
-				if(Tmp!=0xA1){
-			    return;
+				if(Tmp!= pPWMSetPluseWid__ID ){
+					
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			  }
 				
 			  (*(u32(*)())usmart_nametab[16].func)(u32_param[0],(uint8_t)u32_param[1],u16_param[0]);
-			
-				break;		
+			  msg_feedback_ID(pPWMSetPluseWid__ID);  //返回ID
+				break;	
+				
 			case 0xDB:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);		  
 			  u32_param[1] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++; 
+			  
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-				if(Tmp!=0xA1){
-			    return;
+			
+				if(Tmp!= pPWMICGetPluseWid__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			  }
 				
 			   (*(u32(*)())usmart_nametab[17].func)(u32_param[0],(uint8_t)u32_param[1]);
-			
+			   //msg_feedback_ID(pPWMICGetPluseWid__ID);  //函数内返回
 				break;
 				
 			case 0xDC:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);		  
 			  u32_param[1] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++;
+			  
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-				if(Tmp!=0xA1){
-			    return;
+				if(Tmp!= pPWMICGetFrequency__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			  }
 				
-			   (*(u32(*)())usmart_nametab[18].func)(u32_param[0],(uint8_t)u32_param[1]);			
+			   (*(u32(*)())usmart_nametab[18].func)(u32_param[0],(uint8_t)u32_param[1]);	
+				  //msg_feedback_ID(pPWMICGetFrequency__ID);  //函数内返回
+				
 				break;		
 				
 			case 0xDD:
 				  
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
 			  u32_param[1] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++;
+			
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-				if(Tmp!=0xA1){
-			    return;
+				if(Tmp!= pPWMGetPluse__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			  }
 				
 			   (*(u32(*)())usmart_nametab[19].func)(u32_param[0],(uint8_t)u32_param[1] );
+				  //msg_feedback_ID(pPWMGetPluse__ID);  //函数内返回
 				break;
 				
 			case 0xDE:
 				
         LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);
 		  	u16_param[0] = *((uint16_t*)TmpBfr2);
+			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
+			  
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-				if(Tmp!=0xA1){
-			    return;
+				if(Tmp!= pPWMSetFrequency__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			    return CHO_ERROR;
 			   }
 			  (*(u32(*)())usmart_nametab[38].func)(u32_param[0],u16_param[0] );
+				 msg_feedback_ID(pPWMSetFrequency__ID);  //返回ID
 				break;
 				 
       case 0xCA:
 			
-				LoopList_GetMultiData(&DataBuffer,TmpBfr,4,BIGLIN); 
+				LoopList_GetMultiData(&DataBuffer,TmpBfr,4,BIGLIN);
+        for(i=4;i--;){
+				paramsCheck+= TmpBfr[i];
+				paramsCount++;	
+				}		
+				
 	     	LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);     
-			  u16_param[0] = *((uint16_t*)TmpBfr2);  
+			  u16_param[0] = *((uint16_t*)TmpBfr2); 
+				paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;				
 			  LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);
 			  u16_param[1] = *((uint16_t*)TmpBfr2); 
+				paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
 			  LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);    //这里还是倒序
 			  u16_param[2] = *((uint16_t*)TmpBfr2);
-			
+			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
+				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pPWMInit__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
        (*(u32(*)())usmart_nametab[12].func)(u32_param[0],TmpBfr,u16_param[0],u16_param[1],u16_param[2]);			
-			  
+			  msg_feedback_ID(pPWMInit__ID);  //返回ID
 				break;
 				
 			case 0xCB:
 				
-				LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN); 
+				LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);
+			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
+			  
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
 			
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!=pPWMICInit__ID){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				(*(u32(*)())usmart_nametab[13].func)(u32_param[0],TmpBfr2);
-			
+			  msg_feedback_ID(pPWMICInit__ID);  //返回ID
 				break;
 			
 		  case 0xCC:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  u32_param[1] = Tmp;
-				LoopList_GetMultiData(&DataBuffer,TmpBfr,2,LITTERLIN);
-			  u32_param[2] = *((uint16_t*)TmpBfr);
+		  	paramsCheck += Tmp;  paramsCount ++;
+			
+				LoopList_GetMultiData(&DataBuffer,TmpBfr2,2,LITTERLIN);
+			  u32_param[2] = *((uint16_t*)TmpBfr2);
+			   paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
+			  
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;			
 			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			
+			  if(Tmp!=pPWMPluseInit__ID){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 			 (*(u32(*)())usmart_nametab[14].func)(u32_param[0],u32_param[1], u32_param[2]);
+				msg_feedback_ID(pPWMPluseInit__ID);  //返回ID
 				break;
 				
 			case 0xAA:
-				
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+								
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			
+			  LoopList_GetOneData(&DataBuffer,&Tmp);
+			
+			  if(Tmp!= pPWMDeInit__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+					
+				return CHO_ERROR;
 				}
 				(*(u32(*)())usmart_nametab[15].func)(u32_param[0]);
-			
-				break;
-			  default:
+			  msg_feedback_ID(pPWMDeInit__ID);  //返回ID
 				
-				  return;
+				break;
+				
+				
+			  default:
+				  LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 	 	}
 		
-	   msg_feedback(PWM_Check_Last);
+	   msg_feedback(PWM_Check);
 }
 
-void cho_iic(void){
+char cho_iic(void){
 
    unsigned char Tmp;
 	 unsigned char Tmp1;
@@ -750,7 +881,7 @@ void cho_iic(void){
 }
 
 
-void cho_wifi(void){
+char cho_wifi(void){
 	
     unsigned char Tmp;
     unsigned char dir;

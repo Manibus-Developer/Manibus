@@ -84,8 +84,10 @@ void f_To_h(const float *val,char hex[4]){
 void pADCRead(uint8_t channel){
 	
     char Tmp[4];
-	  u8 Tmp2[5];
+	  u8 Tmp2[6];
 	  float val;
+	  unsigned short paramsCheck =0;  
+	  unsigned char i = 0;
 	
 	  //if(ADC_Channel_registered[channel] ==1){
 			val =  (float)ADC_GetValue[channel]/4096*3.3;
@@ -94,11 +96,18 @@ void pADCRead(uint8_t channel){
 //		}
 
 	  f_To_h(&val,Tmp);
-	  
-	  Tmp2[0] =ADC_Check_One;
-	  memcpy(Tmp2+1,Tmp,4);
 	
-	  Choose_Way2Send(Tmp2,5);	
+	  Tmp2[0] = pADCRead__ID;
+	
+	  for(i=0;i<4;i++){			
+	  paramsCheck += Tmp[i];
+			
+	  }
+		
+	  memcpy(Tmp2+1,Tmp,4);
+
+	  Tmp2[5] = paramsCheck % 0xFF;
+	  Choose_Way2Send(Tmp2,6);	
 }
 
 /*
@@ -143,14 +152,21 @@ void pPWMGetPulse(uint32_t TIM,uint8_t channel){     //返回定时间脉冲值的校验为F
 	char Tmp[4];
 	u8 Tmp2[6];
 	float val;
+	unsigned short paramsCheck =0;  
+	unsigned char i = 0;
+	
 	val = encoder_get[channel];
 	f_To_h(&val,Tmp);
 	
-	Tmp2[0] = PWM_Check_One;
-	Tmp2[1] = PWM_Check_GetPulse;
+	Tmp2[0] = pPWMGetPluse__ID;
 	
-	memcpy(Tmp2+2,Tmp,4);
-
+	for(i=0;i<4;i++){			
+	  paramsCheck += Tmp[i];
+	}
+	
+	memcpy(Tmp2+1,Tmp,4);
+	Tmp2[5] = paramsCheck % 0xFF;
+	
   Choose_Way2Send(Tmp2,6);
 			
 }
@@ -174,7 +190,9 @@ void i_To_h(const uint32_t *val,char hex[4]){
 	  u8 Tmp2[6];
   	uint32_t val;
     uint8_t temp;
-	   
+	  unsigned short paramsCheck =0; 
+	  unsigned char i=0;
+	 
 	  temp = Channel>>4;
 	  Channel &=0x0F;
 	 
@@ -211,9 +229,16 @@ void i_To_h(const uint32_t *val,char hex[4]){
 
 	  i_To_h(&val,Tmp);
 		
-		Tmp2[0] = PWM_Check_One;
-		Tmp2[1] = PWM_Check_ICGetPulseWid;
-    memcpy(Tmp2+2,Tmp,4);
+		Tmp2[0] = pPWMICGetPluseWid__ID;
+			
+		for(i=0;i<4;i++){
+		paramsCheck += Tmp[i];
+		}
+		memcpy(Tmp2+1,Tmp,4);
+		
+    Tmp2[5] = paramsCheck% 0xFF;
+		
+    
     Choose_Way2Send(Tmp2,6);
 		
 }
@@ -223,6 +248,8 @@ void pPWMICGetFrequency(uint32_t TIM,uint8_t Channel){
 		char Tmp[4];
 	  u8 Tmp2[6];
   	uint32_t val;
+	  unsigned short paramsCheck =0; 
+	  unsigned char i=0;
 	
 	  switch(TIM){
 			case TIM2_BASE:
@@ -241,10 +268,17 @@ void pPWMICGetFrequency(uint32_t TIM,uint8_t Channel){
 
 	  i_To_h(&val,Tmp);
 		
-		Tmp2[0] = PWM_Check_One;
-		Tmp2[1] = PWM_Check_ICGetFrequency;
+		Tmp2[0] = pPWMICGetFrequency__ID;
 		
-    memcpy(Tmp2+2,Tmp,4);
+		for(i=0;i<4;i++){
+		paramsCheck += Tmp[i];
+		}
+		
+		memcpy(Tmp2+1,Tmp,4);
+		
+    Tmp2[5] = paramsCheck % 0xFF;
+		
+    
     Choose_Way2Send(Tmp2,6);		
 }
 

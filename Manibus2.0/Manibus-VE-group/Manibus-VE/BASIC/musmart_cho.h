@@ -5,6 +5,9 @@
 #define   RecDataBufferMaxSize			500
 #define   MAX_DATA_TRANSFORM 260
 
+#define   CHO_ERROR    0x00
+#define   CHO_RIGHT    0x01
+
 extern LoopListStruct DataBuffer;
 
 struct _m_usmart_nametab{
@@ -21,9 +24,10 @@ void Msg_Filtrate(void);
 //主线程选择函数
 u32 read_addr(u32 addr);
 void write_addr(u32 addr,u32 val);
-void cho_io(void);
-void cho_usart(void);
-void cho_adc(void);
-void cho_pwm(void);
-void cho_iic(void);
-void cho_wifi(void);
+
+char cho_io(void);
+char cho_usart(void);
+char cho_adc(void);
+char cho_pwm(void);
+char cho_iic(void);
+char cho_wifi(void);

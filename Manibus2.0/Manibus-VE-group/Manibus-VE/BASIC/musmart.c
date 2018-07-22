@@ -131,8 +131,8 @@ void localUsartConfig(void)
 
 void Usart_SendByte_( USART_TypeDef * pUSARTx, uint8_t ch)
 {
-USART_SendData(pUSARTx,ch);		
-while (USART_GetFlagStatus(pUSARTx, USART_FLAG_TXE) == RESET);
+		USART_SendData(pUSARTx,ch);		
+		while (USART_GetFlagStatus(pUSARTx, USART_FLAG_TXE) == RESET);
 }
 
 void Usart_SendArray_(uint32_t Channel,uint8_t *words,u16 length){

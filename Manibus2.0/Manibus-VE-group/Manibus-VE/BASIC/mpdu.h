@@ -5,15 +5,14 @@
 #define IO_Check      0xFE
 #define USART_Check   0xFA
 #define Wifi_Check    0xF9
-
-#define ADC_Check_One  0xFC
-#define ADC_Check_Last 0xA3
+#define ADC_Check     0xFC
+#define PWM_Check     0xFD
 
 #define PWM_Check_One 0xFD
 #define PWM_Check_GetPulse 0xDD
 #define PWM_Check_ICGetPulseWid 0xDB
 #define PWM_Check_ICGetFrequency 0xDC
-#define PWM_Check_Last   0xA4
+
 
 #define USART_Check_One   0xFA
 #define USART2_Check      0x44
@@ -40,8 +39,19 @@
 
 #define pUsartInterrupt    0xA6
 
+#define pADCInit__ID       0xC1
+#define pADCDeInit__ID     0xC2
+#define pADCRead__ID       0xC3
 
-
+#define pPWMInit__ID       0xD1
+#define pPWMICInit__ID     0xD2
+#define pPWMPluseInit__ID  0xD3
+#define pPWMDeInit__ID     0xD4
+#define pPWMSetPluseWid__ID 0xD5
+#define pPWMICGetPluseWid__ID 0xD6
+#define pPWMICGetFrequency__ID 0xD7
+#define pPWMGetPluse__ID   0xD8
+#define pPWMSetFrequency__ID 0xD9
 
 #endif
 
