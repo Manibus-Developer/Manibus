@@ -757,6 +757,7 @@ char cho_pwm(void){
 					
 				return CHO_ERROR;
 				}
+				
 				(*(u32(*)())usmart_nametab[15].func)(u32_param[0]);
 			  msg_feedback_ID(pPWMDeInit__ID);  //返回ID
 				
@@ -773,14 +774,20 @@ char cho_pwm(void){
 
 char cho_iic(void){
 
-   unsigned char Tmp;
-	 unsigned char Tmp1;
-	 unsigned char dir;
-	 unsigned char i;
-	 unsigned char data_flag =  0x00;
-	 uint32_t u32_param[MAX_PARAM];
-	 unsigned char iic_Code[IIC_CodeNum_Max];
-	 LoopList_GetOneData(&DataBuffer,&dir);
+		unsigned char Tmp;
+		unsigned char Tmp1;
+		unsigned char dir;
+		unsigned char i;
+		
+		uint32_t u32_param[MAX_PARAM];
+		unsigned char iic_Code[IIC_CodeNum_Max];
+	
+		unsigned short paramsCheck =0;  
+		unsigned short paramsCount = 0;
+		LoopList_ReadFeature io_feature;
+	  io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
+	
+		LoopList_GetOneData(&DataBuffer,&dir);
 	
 	 switch(dir){
 		 
@@ -788,22 +795,33 @@ char cho_iic(void){
 			 
 		 LoopList_GetOneData(&DataBuffer,&Tmp);    //SCL
 		 u32_param[0] = APB2PERIPH_BASE|(Tmp<<8);
+		 paramsCheck += Tmp;  paramsCount ++;
+		 
 		 LoopList_GetOneData(&DataBuffer,&Tmp);
 		 Tmp1 = Tmp>>4;
 		 u32_param[1]= (Tmp&0x0F)<<Tmp1;
+		 paramsCheck += Tmp;  paramsCount ++;
 		 
 		 LoopList_GetOneData(&DataBuffer,&Tmp);    //SDA
 		 u32_param[2] = APB2PERIPH_BASE|(Tmp<<8);
+		 paramsCheck += Tmp;  paramsCount ++;
+		 
 		 LoopList_GetOneData(&DataBuffer,&Tmp);
 		 Tmp1 = Tmp>>4;
 		 u32_param[3]= (Tmp&0x0F)<<Tmp1;
+		 paramsCheck += Tmp;  paramsCount ++;
+		 
+		 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		 if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
 		 
 	  	LoopList_GetOneData(&DataBuffer,&Tmp);
-		  if(Tmp!=0xA1){
-				return;
+		  if(Tmp!= pIICInit__ID ){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 		  
 			(*(u32(*)())usmart_nametab[21].func)( u32_param[0],(uint16_t)u32_param[1],u32_param[2],u32_param[3]);	
+			msg_feedback_ID(pIICInit__ID);  //返回ID	
 				
 			break;
 				
@@ -811,6 +829,7 @@ char cho_iic(void){
 			 
 			 LoopList_GetOneData(&DataBuffer,&Tmp);    //这里进行iic编号选择
 		   iic_cho = Tmp;
+		   paramsCheck += Tmp;  paramsCount ++;
 		 
 		   if(iic_cho == IIC_ONE){
 				 
@@ -823,39 +842,31 @@ char cho_iic(void){
 			 SDA_cho =3;
 				 
 			 }else{
-			 return;
+			 return CHO_ERROR;
 			 }
 			 
 		   LoopList_GetOneData(&DataBuffer,&Tmp);
+			 Tmp1 = Tmp;
+			 paramsCheck += Tmp;  paramsCount ++;
 			 
-		   if(Tmp == IIC_START){
+		   for(i=0;i<Tmp1;i++){
 				 
-				  iic_Code[0] = Tmp;
-				 
-			    for(Tmp1=1;;Tmp1++){
-						
-					 LoopList_GetOneData(&DataBuffer,&Tmp);
-						
-					 iic_Code[Tmp1] = Tmp;				
-					 if(data_flag == 0x00 && Tmp == IIC_STOP){
-						  
-					    break;		 
-					 }
-					 if(data_flag ==0x01)data_flag = 0x00;											
-					 if(Tmp == 0x06|(Tmp>>4) == 0x06) data_flag = 0x01;
-					 
-					}	 
-			 }else{
-				 
-			 return;
+			 LoopList_GetOneData(&DataBuffer,&Tmp);
+			 iic_Code[i] = Tmp;
+			 paramsCheck += Tmp;  paramsCount ++; 
 				 
 			 }
 			 
-      LoopList_GetOneData(&DataBuffer,&Tmp);
-		  if(Tmp!=0xA1){
-				return;
+			 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			 
+      LoopList_GetOneData(&DataBuffer,&Tmp);			 
+		  if(Tmp!= pIICFunc__ID){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 			
+				
 		  for(i=0;i<=Tmp1;i++){
 				
 				if(iic_Code[i] == 0x06 | (iic_Code[i]>>4) == 0x06){
@@ -868,16 +879,23 @@ char cho_iic(void){
 				}				
 			}
 			
+			
 			if(iic_waitask_Succeed==0x00){   /* 命令执行失败后，切记发送停止信号，避免影响I2C总线上其他设备 */
 				
 			    iic_waitask_Succeed =0x01;
 			  	(*(u32(*)())iic_name[iic_Code[1]].func)();
 				
 			}
-      Queue_readAllDataes();      //这里将数据传输到pc			
+			
+      Queue_readAllDataes();      //这里将数据传输到pc
+			//msg_feedback_ID(pIICFunc);  //函数内返回ID
 			 break;		
+			
+			 default:
+				  LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				 return CHO_ERROR;
 		} 
-    msg_feedback(IIC_Check_Last); 
+    msg_feedback(IIC_Check); 
 }
 
 

@@ -315,7 +315,7 @@ I (..\..\Libraries\FWlib\inc\stm32f10x_dma.h)(0x57C78855)
 I (..\..\Libraries\FWlib\inc\stm32f10x_adc.h)(0x57C78855)
 I (..\..\Libraries\FWlib\inc\stm32f10x_tim.h)(0x57C78855)
 I (..\..\SYS\timref.h)(0x5A508C55)
-F (..\..\basic\musmart_cho.c)(0x5B5400F0)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I ..\..\Libraries\CMSIS -I ..\..\User -I ..\..\Libraries\FWlib\inc -I ..\..\BSP -I ..\..\Handware -I ..\..\Handware\24CXX -I ..\..\Handware\IIC -I ..\..\Handware\KEY -I ..\..\Handware\LCD -I ..\..\Handware\LED -I ..\..\Handware\TOUCH -I ..\..\App -I ..\..\BASIC -I ..\..\SETPERIPH -I ..\..\SYS-I.\RTE\_USART-IC:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\KEIL_\KEIL\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\..\output\musmart_cho.o --omf_browse ..\..\output\musmart_cho.crf --depend ..\..\output\musmart_cho.d)
+F (..\..\basic\musmart_cho.c)(0x5B552E54)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I ..\..\Libraries\CMSIS -I ..\..\User -I ..\..\Libraries\FWlib\inc -I ..\..\BSP -I ..\..\Handware -I ..\..\Handware\24CXX -I ..\..\Handware\IIC -I ..\..\Handware\KEY -I ..\..\Handware\LCD -I ..\..\Handware\LED -I ..\..\Handware\TOUCH -I ..\..\App -I ..\..\BASIC -I ..\..\SETPERIPH -I ..\..\SYS-I.\RTE\_USART-IC:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\KEIL_\KEIL\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\..\output\musmart_cho.o --omf_browse ..\..\output\musmart_cho.crf --depend ..\..\output\musmart_cho.d)
 I (..\..\basic\musmart_cho.h)(0x5B4F09A4)
 I (..\..\SYS\LoopList.h)(0x5B4C9350)
 I (..\..\Libraries\CMSIS\stm32f10x.h)(0x57C78855)
@@ -332,7 +332,7 @@ I (..\..\Libraries\FWlib\inc\stm32f10x_dma.h)(0x57C78855)
 I (..\..\Libraries\FWlib\inc\stm32f10x_adc.h)(0x57C78855)
 I (..\..\Libraries\FWlib\inc\stm32f10x_tim.h)(0x57C78855)
 I (..\..\SYS\timref.h)(0x5A508C55)
-I (..\..\basic\mpdu.h)(0x5B540044)
+I (..\..\basic\mpdu.h)(0x5B552E55)
 I (..\..\SYS\i2c.h)(0x5A9A021F)
 I (..\..\basic\musmart.h)(0x5AD34B88)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdio.h)(0x57F606B8)
@@ -340,7 +340,7 @@ I (..\..\SYS\esp8266.h)(0x5AD34C1C)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\string.h)(0x57F606B8)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
 I (..\..\SYS\Common.h)(0x5AA7B387)
-F (..\..\basic\mpdu.h)(0x5B540044)()
+F (..\..\basic\mpdu.h)(0x5B552E55)()
 F (..\..\basic\musmart_config.c)(0x5B03D92D)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I ..\..\Libraries\CMSIS -I ..\..\User -I ..\..\Libraries\FWlib\inc -I ..\..\BSP -I ..\..\Handware -I ..\..\Handware\24CXX -I ..\..\Handware\IIC -I ..\..\Handware\KEY -I ..\..\Handware\LCD -I ..\..\Handware\LED -I ..\..\Handware\TOUCH -I ..\..\App -I ..\..\BASIC -I ..\..\SETPERIPH -I ..\..\SYS-I.\RTE\_USART-IC:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\KEIL_\KEIL\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\..\output\musmart_config.o --omf_browse ..\..\output\musmart_config.crf --depend ..\..\output\musmart_config.d)
 I (..\..\basic\musmart_cho.h)(0x5B4F09A4)
 I (..\..\SYS\LoopList.h)(0x5B4C9350)
@@ -384,7 +384,7 @@ I (..\..\SYS\timref.h)(0x5A508C55)
 I (..\..\SETPERIPH\basic_periphfunc.h)(0x5AFC13A5)
 I (..\..\BASIC\musmart.h)(0x5AD34B88)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\BASIC\mpdu.h)(0x5B540044)
+I (..\..\BASIC\mpdu.h)(0x5B552E55)
 I (..\..\SYS\esp8266.h)(0x5AD34C1C)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\string.h)(0x57F606B8)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
@@ -407,7 +407,7 @@ I (..\..\Libraries\FWlib\inc\stm32f10x_tim.h)(0x57C78855)
 I (..\..\SYS\timref.h)(0x5A508C55)
 I (..\..\BASIC\musmart.h)(0x5AD34B88)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\BASIC\mpdu.h)(0x5B540044)
+I (..\..\BASIC\mpdu.h)(0x5B552E55)
 I (..\..\SYS\esp8266.h)(0x5AD34C1C)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\string.h)(0x57F606B8)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
@@ -428,7 +428,7 @@ F (..\..\SYS\LoopList.c)(0x5B4C92E4)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --ap
 I (..\..\SYS\LoopList.h)(0x5B4C9350)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdlib.h)(0x57F606B8)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\string.h)(0x57F606B8)
-F (..\..\SYS\i2c.c)(0x5AA67AD5)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I ..\..\Libraries\CMSIS -I ..\..\User -I ..\..\Libraries\FWlib\inc -I ..\..\BSP -I ..\..\Handware -I ..\..\Handware\24CXX -I ..\..\Handware\IIC -I ..\..\Handware\KEY -I ..\..\Handware\LCD -I ..\..\Handware\LED -I ..\..\Handware\TOUCH -I ..\..\App -I ..\..\BASIC -I ..\..\SETPERIPH -I ..\..\SYS-I.\RTE\_USART-IC:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\KEIL_\KEIL\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\..\output\i2c.o --omf_browse ..\..\output\i2c.crf --depend ..\..\output\i2c.d)
+F (..\..\SYS\i2c.c)(0x5B552E55)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I ..\..\Libraries\CMSIS -I ..\..\User -I ..\..\Libraries\FWlib\inc -I ..\..\BSP -I ..\..\Handware -I ..\..\Handware\24CXX -I ..\..\Handware\IIC -I ..\..\Handware\KEY -I ..\..\Handware\LCD -I ..\..\Handware\LED -I ..\..\Handware\TOUCH -I ..\..\App -I ..\..\BASIC -I ..\..\SETPERIPH -I ..\..\SYS-I.\RTE\_USART-IC:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\KEIL_\KEIL\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\..\output\i2c.o --omf_browse ..\..\output\i2c.crf --depend ..\..\output\i2c.d)
 I (..\..\SYS\i2c.h)(0x5A9A021F)
 I (..\..\Libraries\CMSIS\stm32f10x.h)(0x57C78855)
 I (..\..\Libraries\CMSIS\core_cm3.h)(0x57C78855)
@@ -446,7 +446,7 @@ I (..\..\Libraries\FWlib\inc\stm32f10x_tim.h)(0x57C78855)
 I (..\..\SYS\timref.h)(0x5A508C55)
 I (..\..\BASIC\musmart.h)(0x5AD34B88)
 I (C:\KEIL_\KEIL\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\BASIC\mpdu.h)(0x5B540044)
+I (..\..\BASIC\mpdu.h)(0x5B552E55)
 F (..\..\SYS\Common.c)(0x5AA68475)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I ..\..\Libraries\CMSIS -I ..\..\User -I ..\..\Libraries\FWlib\inc -I ..\..\BSP -I ..\..\Handware -I ..\..\Handware\24CXX -I ..\..\Handware\IIC -I ..\..\Handware\KEY -I ..\..\Handware\LCD -I ..\..\Handware\LED -I ..\..\Handware\TOUCH -I ..\..\App -I ..\..\BASIC -I ..\..\SETPERIPH -I ..\..\SYS-I.\RTE\_USART-IC:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\KEIL_\KEIL\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\..\output\common.o --omf_browse ..\..\output\common.crf --depend ..\..\output\common.d)
 I (..\..\SYS\Common.h)(0x5AA7B387)
 I (..\..\Libraries\CMSIS\stm32f10x.h)(0x57C78855)

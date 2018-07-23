@@ -7,6 +7,7 @@
 #define Wifi_Check    0xF9
 #define ADC_Check     0xFC
 #define PWM_Check     0xFD
+#define IIC_Check     0xFB
 
 #define PWM_Check_One 0xFD
 #define PWM_Check_GetPulse 0xDD
@@ -52,6 +53,9 @@
 #define pPWMICGetFrequency__ID 0xD7
 #define pPWMGetPluse__ID   0xD8
 #define pPWMSetFrequency__ID 0xD9
+
+#define pIICInit__ID       0xB1
+#define pIICFunc__ID       0xB2
 
 #endif
 

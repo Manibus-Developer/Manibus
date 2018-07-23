@@ -264,20 +264,28 @@ uint8_t Queue_readData(void){
 void Queue_readAllDataes(void){
     
 	  u8 temp;
-	  u16 temp2 = Queue_dataSize[iic_cho]+3;
+	  u16 temp2 = Queue_dataSize[iic_cho]+4;
 		unsigned char iic_data_buffer[259];
 	
+	  unsigned short paramsCheck =0;  
+	  
 	  if(Queue_dataSize[iic_cho] == 0)return;
 
-	   iic_data_buffer[0] = IIC_Check_One;
+	   iic_data_buffer[0] = pIICFunc__ID;
 	   iic_data_buffer[1] = (uint8_t)iic_cho;
 	   iic_data_buffer[2] = (uint8_t)Queue_dataSize[iic_cho];		
-	   
-		for(temp =3;temp<temp2;temp++){
+		
+	  for(temp=0;temp<temp2-1;temp++){
 			
+		paramsCheck += iic_data_buffer[temp];
+			
+		if(temp>=3){
 				iic_data_buffer[temp] = Queue_readData();
+			}
 		}
-	   
+		
+		iic_data_buffer[temp2-1] = paramsCheck % 0xFF;
+		
      Usart_ReadArray_(iic_data_buffer,temp2);	  
 }
 
