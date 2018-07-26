@@ -102,6 +102,18 @@ void msg_feedback_ID(uint8_t byte){
 		}	
 }
 
+void msg_feedback_ID2(uint8_t *bytes,uint8_t length){
+
+     if(USART1_Channel_FLAG){
+			
+			Usart_SendArray_(USART1_BASE,bytes,length);  //暂时不使用DMA发送
+			 
+	   }else if(WIFI_Channel_FLAG){
+			
+			pWifiRead_(bytes,length);
+
+		}	
+}
 
 u32 read_addr(u32 addr)
 {
@@ -162,7 +174,10 @@ char cho_io(void){      //已确认
 			
 
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;  
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}   
 			
 			
 		 	LoopList_GetOneData(&DataBuffer,&Tmp);	
@@ -185,7 +200,10 @@ char cho_io(void){      //已确认
 			paramsCheck += Tmp;  paramsCount ++;
 			
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			} 
 			
 			LoopList_GetOneData(&DataBuffer,&Tmp); 
 		  if(Tmp!= pPinReadBit__ID ){
@@ -213,7 +231,10 @@ char cho_io(void){      //已确认
 			paramsCheck += Tmp;  paramsCount ++;
 			
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			} 
 			
 		  LoopList_GetOneData(&DataBuffer,&Tmp);	
 			 if(Tmp!= pPinInit__ID ){
@@ -230,7 +251,10 @@ char cho_io(void){      //已确认
 			case 0xAA:
 				
 			LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
+			if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			} 
 			
 			 LoopList_GetOneData(&DataBuffer,&Tmp);
 			 if(Tmp!= pPinDeInit__ID ){
@@ -320,7 +344,10 @@ char cho_usart(void){      //这里使用USART2或者UART4
 			  paramsCheck += Tmp;  paramsCount ++;	
 			  
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			  paramsCheck =0;paramsCount=0;
 			
 			  for(i=0;i<datalength;i++){
@@ -330,7 +357,10 @@ char cho_usart(void){      //这里使用USART2或者UART4
 				}
 
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 				
 				 LoopList_GetOneData(&DataBuffer,&Tmp);		
 			   if(Tmp!= pUsartWrite__ID ){
@@ -346,7 +376,10 @@ char cho_usart(void){      //这里使用USART2或者UART4
 			case 0xDB:
 				
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				 LoopList_GetOneData(&DataBuffer,&Tmp);	
 			   if(Tmp!= pUsartRead__ID ){
@@ -412,7 +445,10 @@ char cho_usart(void){      //这里使用USART2或者UART4
 				 paramsCheck += Tmp;  paramsCount ++;
 				 
 				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 				 
 				 LoopList_GetOneData(&DataBuffer,&Tmp);
 			   if(Tmp!= pUsartInit__ID ){
@@ -427,8 +463,11 @@ char cho_usart(void){      //这里使用USART2或者UART4
 				 
 			case 0xAA:		
 				
-				 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR; 
+				 LoopList_GetOneData(&DataBuffer,&Tmp);			           
+			   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			} 
 			
 				 LoopList_GetOneData(&DataBuffer,&Tmp);
 			   if(Tmp!= pUsartDeInit__ID ){
@@ -477,8 +516,11 @@ char cho_adc(void){
 			  u32_param[0] = Tmp;
 			  paramsCheck += Tmp;  paramsCount ++;
 			  
-				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+				LoopList_GetOneData(&DataBuffer,&Tmp);			     //这里进行参数值校验       
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  if(Tmp!= pADCRead__ID ){
@@ -506,8 +548,11 @@ char cho_adc(void){
 				 paramsCheck += Tmp;  paramsCount ++; 
 			  }
 				
-				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+				LoopList_GetOneData(&DataBuffer,&Tmp);			         //这里进行参数值校验   
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  if(Tmp!= pADCInit__ID ){
@@ -581,8 +626,11 @@ char cho_pwm(void){
 		  	u16_param[0] = *((uint16_t*)TmpBfr2);
 			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
 			
-			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			       //这里进行参数值校验    
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);				
 				if(Tmp!= pPWMSetPluseWid__ID ){
@@ -602,7 +650,10 @@ char cho_pwm(void){
 			  paramsCheck += Tmp;  paramsCount ++; 
 			  
 			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			
@@ -622,7 +673,10 @@ char cho_pwm(void){
 			  paramsCheck += Tmp;  paramsCount ++;
 			  
 			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 				if(Tmp!= pPWMICGetFrequency__ID ){
@@ -642,7 +696,10 @@ char cho_pwm(void){
 			  paramsCheck += Tmp;  paramsCount ++;
 			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 				if(Tmp!= pPWMGetPluse__ID ){
@@ -661,7 +718,10 @@ char cho_pwm(void){
 			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
 			  
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 				if(Tmp!= pPWMSetFrequency__ID ){
@@ -691,7 +751,10 @@ char cho_pwm(void){
 			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  if(Tmp!= pPWMInit__ID ){
@@ -709,7 +772,10 @@ char cho_pwm(void){
 			  paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
 			  
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
 			
@@ -732,7 +798,10 @@ char cho_pwm(void){
 			   paramsCheck += TmpBfr2[0];paramsCheck += TmpBfr2[1]; paramsCount +=2;
 			  
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;			
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}			
 			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
 			
@@ -748,7 +817,10 @@ char cho_pwm(void){
 			case 0xAA:
 								
 				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+			  if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
 			
@@ -812,7 +884,10 @@ char cho_iic(void){
 		 paramsCheck += Tmp;  paramsCount ++;
 		 
 		 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-		 if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+		 if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 		 
 	  	LoopList_GetOneData(&DataBuffer,&Tmp);
 		  if(Tmp!= pIICInit__ID ){
@@ -858,7 +933,10 @@ char cho_iic(void){
 			 }
 			 
 			 LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
-		   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) return CHO_ERROR;
+		   if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+			  return CHO_ERROR;
+			}
 			 
       LoopList_GetOneData(&DataBuffer,&Tmp);			 
 		  if(Tmp!= pIICFunc__ID){
@@ -903,43 +981,61 @@ char cho_wifi(void){
 	
     unsigned char Tmp;
     unsigned char dir;
-	  unsigned char State_check[2];
+	  unsigned char State_check[3];
 	  uint32_t u32_param[MAX_PARAM];
 	  u8 *Tmp_1;
     u8 *Tmp_2;
+	  
+	  unsigned short paramsCheck =0;  
+		unsigned short paramsCount = 0;
+		LoopList_ReadFeature io_feature;
+	  io_feature = LoopList_Marked(&DataBuffer);    //这里对读取点进行标记
 	
 		LoopList_GetOneData(&DataBuffer,&dir);
 
 	  switch(dir){
 		
 			case 0xDA:
+				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  u32_param[0] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++;
 			
-			  if(Tmp >0x02){    //参数校验
-				return;
-				}
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		    if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
+				} 
 				
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifi_NetModeChoose__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 				}
 				
-				(*(u32(*)())usmart_nametab[25].func)( (u8)u32_param[0]);
-				State_check[0] = Wifi_Check_One;
+				(*(u32(*)())usmart_nametab[25].func)((u8)u32_param[0]);
+				
+				State_check[0] = pWifi_NetModeChoose__ID;
 				State_check[1] = ESP8266_STATE;
-				pWifiRead_(State_check,2);
+				State_check[2] = ESP8266_STATE % 0xFF;
+				msg_feedback_ID2(State_check,3);
 				
 				break;
 				
 			case 0xDB:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0xFF) return ;   //隔离参数校验
+		  	paramsCheck += Tmp;  paramsCount ++; 
+			
+			  if(Tmp!= 0xFF) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;   //隔离参数校验
+				}
 			  
+			
 			  while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;	
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -949,7 +1045,7 @@ char cho_wifi(void){
 				
 				while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -957,26 +1053,40 @@ char cho_wifi(void){
 				 }
 		  	}
 				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		    if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
+				}
+								
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifi_JoinAP__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 				(*(u32(*)())usmart_nametab[26].func)( (char)Tmp_1,(char)Tmp_2);
-				State_check[0] = Wifi_Check_One;
+				State_check[0] = pWifi_JoinAP__ID;
 				State_check[1] = ESP8266_STATE;
-				pWifiRead_(State_check,2);
+				State_check[2] = ESP8266_STATE % 0xFF;
+				msg_feedback_ID2(State_check,3);
 				
 				break;
 				
 			case 0xDC:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0xFF) return ;   //隔离参数校验
+			  paramsCheck += Tmp;  paramsCount ++;
+			
+			  if(Tmp!= 0xFF) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;   //隔离参数校验
+				}
+			  
 			
 			  while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+			   paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -986,7 +1096,7 @@ char cho_wifi(void){
 				
 				while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -995,31 +1105,45 @@ char cho_wifi(void){
 		  	}
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
+				paramsCheck += Tmp;  paramsCount ++;
 				u32_param[0] = Tmp;
-				if(Tmp>0x04)return;
+				if(Tmp>0x04)return CHO_ERROR;
+				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		    if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
+				}
 				
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifi_BuildAP__ID ){
+				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				 return CHO_ERROR;
 				}
 				(*(u32(*)())usmart_nametab[27].func)( (char)Tmp_1,(char)Tmp_2);	
 				
-				State_check[0] = Wifi_Check_One;
+				State_check[0] = pWifi_BuildAP__ID;
 				State_check[1] = ESP8266_STATE;
-				pWifiRead_(State_check,2);				
+				State_check[2] = ESP8266_STATE % 0xFF;
+				msg_feedback_ID2(State_check,3);				
 				break;
 				
 		  case 0xDE:
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  u32_param[0] = Tmp;
-			  if(Tmp>0x01)return;
+			  paramsCheck += Tmp;  paramsCount ++;
+			  
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0xFF) return ;   //隔离参数校验
+			  paramsCheck += Tmp;  paramsCount ++;
+			  if(Tmp!= 0xFF) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;   //隔离参数校验
+				}
 			
 			  while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -1029,7 +1153,7 @@ char cho_wifi(void){
 				
 			  while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -1037,196 +1161,217 @@ char cho_wifi(void){
 				 }
 		  	}
 				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		    if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
+				}
+				
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifi_ifServerMode__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 			(*(u32(*)())usmart_nametab[30].func)( (u8)u32_param[0],(char)Tmp_1,(char)Tmp_2);
 				
-				State_check[0] = Wifi_Check_One;
+				State_check[0] = pWifi_ifServerMode__ID;
 				State_check[1] = ESP8266_STATE;
-				pWifiRead_(State_check,2);	
+				State_check[2] = ESP8266_STATE % 0xFF;
+				msg_feedback_ID2(State_check,3);	
 				
 				break;
 				
 		  case 0xDF:
-				
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0x5D) return ;   //特殊参数校验
+	
 			
-			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!=0xA1){
-				return;
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			  
+			  if(Tmp!= pWifi_GetLinkStatus__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 				}
 				
 				(*(u32(*)())usmart_nametab[31].func)();
-				State_check[0] = Wifi_Check_One;
+				
+				State_check[0] = pWifi_GetLinkStatus__ID;
 				State_check[1] = ESP8266_LinkStatus;
-				pWifiRead_(State_check,2);
+				State_check[2] = ESP8266_LinkStatus % 0xFF;
+				msg_feedback_ID2(State_check,3);
+				
 				ESP8266_LinkStatus =0x00;
 				
 				break;
 				
 			case 0xD9:
 				
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0x9D) return ;   //特殊参数校验
-			
-			  LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+				LoopList_GetOneData(&DataBuffer,&Tmp);			  
+			  if(Tmp!= pWifi_GetIdLinkStatus__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 				}
 				
 				(*(u32(*)())usmart_nametab[32].func)();
 				
-				State_check[0] = Wifi_Check_One;
-				State_check[1] = ESP8266_ucIdLinkStatus;				
-				pWifiRead_(State_check,2);
+				State_check[0] = pWifi_GetIdLinkStatus__ID;
+				State_check[1] = ESP8266_ucIdLinkStatus;	
+				State_check[2] = ESP8266_ucIdLinkStatus % 0xFF;
+				msg_feedback_ID2(State_check,3);
 				ESP8266_ucIdLinkStatus = 0x00;
 				
         break;
 				
 			case 0xD8:
 				
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0x8A) return ;   //特殊参数校验
-			  
-        LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+				LoopList_GetOneData(&DataBuffer,&Tmp);			  
+			  if(Tmp!= pWifi_Inquire_ApIp__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 				}
+				
 				(*(u32(*)())usmart_nametab[33].func)();
-				State_check[0] = Wifi_Check_One;
-				State_check[1] = ESP8266_STATE;				
-				pWifiRead_(State_check,2);				
+				State_check[0] = pWifi_Inquire_ApIp__ID;
+				State_check[1] = ESP8266_STATE;	
+        State_check[2] = ESP8266_STATE % 0xFF;				
+				msg_feedback_ID2(State_check,3);				
 				
 				break;
 				
 			case 0xD7:
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0x7C) return ;   //特殊参数校验
-			
-			  LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			  
+			  if(Tmp!= pWifi_UnvarnishSend__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
 				}
 				
 				(*(u32(*)())usmart_nametab[34].func)();
 				
-				State_check[0] = Wifi_Check_One;
-				State_check[1] = ESP8266_STATE;				
-				pWifiRead_(State_check,2);
+				State_check[0] = pWifi_UnvarnishSend__ID;
+				State_check[1] = ESP8266_STATE;	
+        State_check[2] = ESP8266_STATE % 0xFF;				
+				msg_feedback_ID2(State_check,3);
 			
 				break;
 				
 			case 0xD6:
-				
-				LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0x6B) return ;   //特殊参数校验
-			
+							
 			  LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifi_ExitUnvarnishSend__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				 return CHO_ERROR;
 				} 
 			
 				(*(u32(*)())usmart_nametab[35].func)();
-			
+			  msg_feedback_ID(pWifi_ExitUnvarnishSend__ID);
+				
 				break;
 				
-			case 0xD5:   //数据返回WIFI方式调用函数  特殊
+			case 0xD5:   //数据返回WIFI方式调用函数  特殊 
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);
 			  u32_param[0] = Tmp;
-			  if(Tmp>0x01)return;
+			  
 				
-			  LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp > 0x05) return ;   
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			     
 				u32_param[1] = Tmp;
 				
+			
 				LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifiOnLine__ID ){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				} 
 			
 			(*(u32(*)())usmart_nametab[36].func)((u8)u32_param[0],(u8)u32_param[1]);
-				return;    ////这里不在到后面有反馈值
+				return CHO_RIGHT;    ////这里不在到后面有反馈值
 
         break;
 				
 			case 0xCA:
-				
-			  LoopList_GetOneData(&DataBuffer,&Tmp);
-        if(Tmp!= 0x68) return ;   //特殊参数校验
-			
+						
 				LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!=pWifiInit__ID){
+				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 			(*(u32(*)())usmart_nametab[22].func)();
-			
+			msg_feedback_ID(pWifiInit__ID);
+				
 				break;	
 				
 			case 0xCB:
 				
-			  LoopList_GetOneData(&DataBuffer,&Tmp);
-        if(Tmp!= 0x69) return ;   //特殊参数校验
-			
-				LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			
+			  if(Tmp!=pWifiReset_ID){
+				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 			(*(u32(*)())usmart_nametab[23].func)();
-			
+			 msg_feedback_ID(pWifiReset_ID);
+				
 				break;	
 				
-	 	case 0xCC:
-				
-			  LoopList_GetOneData(&DataBuffer,&Tmp);
-        if(Tmp!= 0x6A) return ;   //特殊参数校验
-			
-				LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+	  	case 0xCC:
+		 		
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			
+			  if(Tmp!=pWifi_AT_Test__ID){
+				 LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 			(*(u32(*)())usmart_nametab[24].func)();
-				State_check[0] = Wifi_Check_One;
-				State_check[1] = ESP8266_STATE;				
-				pWifiRead_(State_check,2);
+				State_check[0] = pWifi_AT_Test__ID;
+				State_check[1] = ESP8266_STATE;		
+        State_check[2] = ESP8266_STATE % 0xFF;				
+				msg_feedback_ID2(State_check,3);
 				
 				break;
+				
 			 case 0xCD:
 				
-			  LoopList_GetOneData(&DataBuffer,&Tmp);
-        if(Tmp>0x02) return ;   
+			  LoopList_GetOneData(&DataBuffer,&Tmp);   
 			  u32_param[0] = Tmp;
+			  paramsCheck += Tmp;  paramsCount ++;
 			 
+			  LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		    if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
+				}
+				
 				LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!=  pWifi_Use_MultipleId__ID){
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
 				
 		 	(*(u32(*)())usmart_nametab[28].func)((u8)u32_param[0]);
-				State_check[0] = Wifi_Check_One;
-				State_check[1] = ESP8266_STATE;				
-				pWifiRead_(State_check,2);
+				
+				State_check[0] = pWifi_Use_MultipleId__ID;
+				State_check[1] = ESP8266_STATE;	
+        State_check[2] = ESP8266_STATE % 0xFF;				
+				msg_feedback_ID2(State_check,3);
 				
 				break;	
 				
 		case 0xCE:
+			
 			  LoopList_GetOneData(&DataBuffer,&Tmp);
-		    if(Tmp >0x01)return;
 		    u32_param[0] = Tmp;
+		    paramsCheck += Tmp;  paramsCount ++;
 		
-		     LoopList_GetOneData(&DataBuffer,&Tmp);
-			  if(Tmp!= 0xFF) return ;   //隔离参数校验
+		    LoopList_GetOneData(&DataBuffer,&Tmp);
+		    paramsCheck += Tmp;  paramsCount ++;
+			  if(Tmp!= 0xFF){
+				   LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+					 return CHO_ERROR;   //隔离参数校验
+				}
 		    
 		     while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -1236,7 +1381,7 @@ char cho_wifi(void){
 				 
 				 while(1){
 			   LoopList_GetOneData(&DataBuffer,&Tmp);
-					
+				 paramsCheck += Tmp;  paramsCount ++;
 				 if(Tmp == 0xFF){
            break;					 
 				 }else{
@@ -1245,23 +1390,37 @@ char cho_wifi(void){
 		  	}
 				 
 				LoopList_GetOneData(&DataBuffer,&Tmp);
-		    if(Tmp >0x05)return;
 		    u32_param[1] = Tmp;
+				paramsCheck += Tmp;  paramsCount ++;
+				
+				
+				LoopList_GetOneData(&DataBuffer,&Tmp);			            //这里进行参数值校验
+		    if(!ParamsCheckOut(paramsCheck,paramsCount,Tmp)) {
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				  return CHO_ERROR;
+				}
 				
 				LoopList_GetOneData(&DataBuffer,&Tmp);			
-			  if(Tmp!=0xA1){
-				return;
+			  if(Tmp!= pWifi_LinkServer__ID ){
+				LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				return CHO_ERROR;
 				}
+				
 			(*(u32(*)())usmart_nametab[29].func)((u8)u32_param[0],(char)Tmp_1,(char)Tmp_2,(u8)u32_param[1]);
 				
-				State_check[0] = Wifi_Check_One;
-				State_check[1] = ESP8266_STATE;				
-				pWifiRead_(State_check,2);
+				State_check[0] = pWifi_LinkServer__ID;
+				State_check[1] = ESP8266_STATE;	
+        State_check[2] = ESP8266_STATE % 0xFF;
+				msg_feedback_ID2(State_check,3);
 				
-        break;			
+        break;	
+				
+		default:
+					LoopList_FeedBack(&DataBuffer,io_feature.ReadPoint,io_feature.DataSize);  //这里错误，回归到队列标记点
+				 return CHO_ERROR;		
 		}			
 				
-		 msg_feedback(Wifi_Check_Last);
+		 msg_feedback(Wifi_Check);
      ESP8266_STATE = ESP8266_RIGHT;
 		
 }

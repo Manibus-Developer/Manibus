@@ -510,6 +510,7 @@ void pWifiRead_( u8 * pStr, u32 ulStrLength ){
 	}
 	else
 	{
+		
 		if ( WIFI_READ_ID < 5 )
 			sprintf ( cStr, "AT+CIPSEND=%d,%d", WIFI_READ_ID, ulStrLength + 2 );
 
