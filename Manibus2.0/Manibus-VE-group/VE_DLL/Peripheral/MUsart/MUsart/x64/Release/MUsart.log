@@ -1,24 +1,8 @@
 ﻿  MUsart.cpp
-MUsart.cpp(18): warning C4309: “=”: 截断常量值
-MUsart.cpp(19): warning C4309: “=”: 截断常量值
-MUsart.cpp(43): warning C4309: “=”: 截断常量值
-MUsart.cpp(53): warning C4309: “=”: 截断常量值
-MUsart.cpp(54): warning C4309: “=”: 截断常量值
-MUsart.cpp(59): warning C4309: “=”: 截断常量值
-MUsart.cpp(71): warning C4309: “=”: 截断常量值
-MUsart.cpp(72): warning C4309: “=”: 截断常量值
-MUsart.cpp(80): warning C4309: “=”: 截断常量值
-MUsart.cpp(67): warning C4101: “params2hex”: 未引用的局部变量
-MUsart.cpp(90): warning C4309: “=”: 截断常量值
-MUsart.cpp(91): warning C4309: “=”: 截断常量值
-MUsart.cpp(96): warning C4309: “=”: 截断常量值
-MUsart.cpp(106): warning C4309: “=”: 截断常量值
-MUsart.cpp(107): warning C4309: “=”: 截断常量值
-MUsart.cpp(108): warning C4309: “=”: 截断常量值
-    正在创建库 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MUsart\MUsart\x64\Release\MUsart.lib 和对象 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MUsart\MUsart\x64\Release\MUsart.exp
+    正在创建库 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MUsart\x64\Release\MUsart.lib 和对象 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MUsart\x64\Release\MUsart.exp
   正在生成代码
-  0 of 14 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  0 of 10 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
-  MUsart.vcxproj -> C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MUsart\MUsart\x64\Release\MUsart.dll
+  MUsart.vcxproj -> C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MUsart\x64\Release\MUsart.dll

@@ -7,6 +7,15 @@
 #define USART_Check        0xFA
 #define USART_FeedBack     0xA2
 
+
+#define USART_pUsartInit__ID      0xA1
+#define USART_pUsartDeInit__ID    0xA2
+#define USART_pUsartWrite__ID     0xA3
+#define USART_pUsartRead__ID      0xA4
+#define USART_pUsartOnLine__ID    0xA5
+
+#define UARTRIGHT           0xFA
+
 typedef enum {
 
 	USART2 = 0x44,
@@ -67,21 +76,20 @@ class MUSART {
 
 public:
 
-	virtual MUSART_API std::pair<char, char*> UsartInit(USART_Type Usart, USARTBAUD_Type Baud,
+	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartInit(USART_Type Usart, USARTBAUD_Type Baud,
 		USARTWORDLEN_Type WordLength, USARTSTOPBIT_Type StopBits, USARTPARITY_Type Parity,
 		USARTHFC_Type HFC, USARTMODE_Type Mode, unsigned char MsgMode);
 
-	virtual MUSART_API std::pair<char, char*> UsartDeInit(USART_Type Usart);
-	virtual MUSART_API std::pair<char, char*> UsartWrite(USART_Type Usart, unsigned char * Words,unsigned char Length);
-	virtual MUSART_API std::pair<char, char*> UsartRead(USART_Type Usart);
+	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartDeInit(USART_Type Usart);
+	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartWrite(USART_Type Usart, unsigned char * Words,unsigned char Length);
+	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartRead(USART_Type Usart);
 
-	virtual MUSART_API char* UsartOnLine();
+	virtual MUSART_API unsigned char* UsartOnLine();
 
-	char USART_RIGHT = 0x00;
+	unsigned char USART_RIGHT = 0x00;
 
 private:
 
-	char *UsartWriteBuffer;
 #define IS_USART_1234_PERIPH(PERIPH) (((PERIPH) == USART2) || \
                                  ((PERIPH) == UART4))
 

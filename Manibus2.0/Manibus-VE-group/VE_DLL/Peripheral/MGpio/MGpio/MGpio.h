@@ -5,8 +5,11 @@
 
 #define MGPIO_API  __declspec(dllexport)
 
-#define GPIO_Check          0xFE
-#define GPIO_FeedBack       0xA1
+#define GPIO_Check						0xFE
+#define GPIO_pPinInit__ID               0xE1
+#define GPIO_pPinDeInit__ID             0xE2
+#define GPIO_pPinOutPut__ID             0xE3
+#define GPIO_pPinReadBit__ID            0xE4
 
 #define GPIORIGHT           0xFE
 

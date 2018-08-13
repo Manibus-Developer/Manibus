@@ -9,18 +9,8 @@
 #define PWM_Check     0xFD
 #define IIC_Check     0xFB
 
-
-
-#define PWM_Check_One 0xFD
-#define PWM_Check_GetPulse 0xDD
-#define PWM_Check_ICGetPulseWid 0xDB
-#define PWM_Check_ICGetFrequency 0xDC
-
-
-#define USART_Check_One   0xFA
 #define USART2_Check      0x44
 #define UART4_Check       0x4C
-#define USART_Check_Last  0xA2
 
 #define IIC_Check_One     0xFB
 #define IIC_Check_Last    0xA5
