@@ -6,12 +6,22 @@
 #define MPWM_API __declspec(dllexport)
 
 #define PWM_Check         0xFD
-#define PWM_FeedBack      0xA4
-#define PWMRIGHT          0xFE
+
 #define PWM_pPWMICGetPluseWid   0xDB
 #define PWM_pPWMICGetFrequancy  0xDC
 #define PWM_pPWMGetPluse        0xDD
 
+#define PWM_pPWMInit__ID        0xD1
+#define PWM_pPWMICInit__ID      0xD2
+#define pPWMPluseInit__ID       0xD3
+#define pPWMDeInit__ID          0xD4
+#define pPWMSetPluseWid__ID     0xD5
+#define pPWMICGetPluseWid__ID   0xD6
+#define pPWMICGetFrequency__ID  0xD7
+#define pPWMGetPluse__ID        0xD8
+#define pPWMSetFrequency__ID    0xD9
+
+#define PWMRIGHT          0xFD
 
 typedef enum {
 	
