@@ -12,12 +12,6 @@
 #define USART2_Check      0x44
 #define UART4_Check       0x4C
 
-#define IIC_Check_One     0xFB
-#define IIC_Check_Last    0xA5
-
-#define Wifi_Check_One    0xF9
-#define Wifi_Check_Last   0xA6
-
 
 #define pPinInit__ID       0xE1
 #define pPinDeInit__ID     0xE2

@@ -1,10 +1,8 @@
-﻿  stdafx.cpp
-  dllmain.cpp
-  MGpio.cpp
+﻿  MGpio.cpp
     正在创建库 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MGpio\x64\Release\MGpio.lib 和对象 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MGpio\x64\Release\MGpio.exp
   正在生成代码
-  16 of 16 functions (100.0%) were compiled.
-    0 functions were new in current compilation
+  5 of 19 functions (26.3%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   MGpio.vcxproj -> C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MGpio\x64\Release\MGpio.dll

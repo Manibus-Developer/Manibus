@@ -1,8 +1,9 @@
-﻿  stdafx.cpp
-  dllmain.cpp
-  MADC.cpp
-    正在创建库 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MADC\MADC\x64\Release\MADC.lib 和对象 C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MADC\MADC\x64\Release\MADC.exp
+﻿  MADC.cpp
+c:\users\17973\desktop\git_hub\manibus\manibus2.0\manibus-ve-group\ve_dll\peripheral\madc\madc\madc.cpp(35): warning C4244: “=”: 从“unsigned short”转换到“unsigned char”，可能丢失数据
+    正在创建库 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MADC\x64\Release\MADC.lib 和对象 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MADC\x64\Release\MADC.exp
   正在生成代码
-  All 15 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 18 functions ( 5.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
-  MADC.vcxproj -> C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\MADC\MADC\x64\Release\MADC.dll
+  MADC.vcxproj -> C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MADC\x64\Release\MADC.dll

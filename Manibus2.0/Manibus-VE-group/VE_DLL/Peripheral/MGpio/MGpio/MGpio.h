@@ -5,13 +5,13 @@
 
 #define MGPIO_API  __declspec(dllexport)
 
-#define GPIO_Check						0xFE
-#define GPIO_pPinInit__ID               0xE1
-#define GPIO_pPinDeInit__ID             0xE2
-#define GPIO_pPinOutPut__ID             0xE3
-#define GPIO_pPinReadBit__ID            0xE4
+#define GPIO_Check				   0xFE
+#define pPinInit__ID               0xE1
+#define pPinDeInit__ID             0xE2
+#define pPinOutPut__ID             0xE3
+#define pPinReadBit__ID            0xE4
 
-#define GPIORIGHT           0xFE
+#define GPIORIGHT                  0xFE
 
 typedef enum {
 
@@ -79,20 +79,34 @@ class  MGPIO_API MGPIO {
 
 public:
 
+	 MGPIO();
+	 ~MGPIO();
+
 	 virtual std::pair<unsigned short, unsigned char*> PinInit(GPIOIO_Type IO, GPIOPIN_Type Pin, GPIOMODE_Type Mode, GPIOSpeed_Type Speed);
 	 virtual std::pair<unsigned short, unsigned char*> PinDeInit(GPIOIO_Type IO);
 	 virtual std::pair<unsigned short, unsigned char*> PinOutPut(GPIOIO_Type IO, GPIOPIN_Type Pin, BitAction Level);
 	 virtual std::pair<unsigned short, unsigned char*> PinReadBit(GPIOIO_Type IO, GPIOPIN_Type Pin);
 
-	 virtual unsigned char* MGPIOSerialFeedBack();
-	 virtual unsigned char* MGPIOWifiFeedBack(unsigned char ID);
+	 virtual std::pair<unsigned short, unsigned char*> MGPIOSerialFeedBack();
+	 virtual std::pair<unsigned short, unsigned char*> MGPIOWifiFeedBack(unsigned char ID);
+
+	 virtual bool GPIO_FeedBack(unsigned char ID, unsigned char *Msg);
+	 virtual bool GPIO_FeedBack(unsigned char ID, unsigned char *Msg,unsigned char * readback);
+
 
 	 unsigned char GPIO_RIGHT = 0x00;
 
 private:
 
+	 unsigned char *sendout_;
 
+	 bool GPIO_ID_CHECK_ = false;
+	 bool GPIO_PARAM_CHECK_ = false;
+	 bool GPIO_CHECK_ = false;
 
+	 unsigned char continue_count = 0;
+
+#define  GPIO_FBInit()             GPIO_ID_CHECK_ = false;GPIO_CHECK_  = false;GPIO_PARAM_CHECK_ = false;continue_count=0;
 #define IS_GPIO_SPEED(SPEED) (((SPEED) == GPIO_Speed_10MHz) || ((SPEED) == GPIO_Speed_2MHz) || \
                               ((SPEED) == GPIO_Speed_50MHz))
 
@@ -131,5 +145,5 @@ private:
 
 
 	bool IS_PARAMS(bool JUDGE);
-   
+	bool IS_RIGHT(unsigned char param1, unsigned char param2);
 };

@@ -33,8 +33,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Peripheral\MADC\MADC;C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Peripheral\MGpio\MGpio;C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Peripheral\MPWM\MPWM;C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Communication\MSerial\MSerial;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Peripheral\MADC\x64\Release;C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Peripheral\MGpio\x64\Release;C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Peripheral\MPWM\x64\Release;C:\Users\17973\Desktop\Manibus\Manibus-VE-group\VE_DLL\Communication\MSerial\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MADC\MADC;C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MGpio\MGpio;C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Communication\MSerial\MSerial;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MGpio\x64\Release;C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MADC\x64\Release;C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Communication\MSerial\x64\Release;C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MPWM\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />

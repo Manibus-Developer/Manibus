@@ -84,7 +84,7 @@ void QT_Platform::serial_connect() {
 		std::string port = temp.toStdString();
 		
 		port_refresh->stop();
-
+	
 		ui.textBrowser_info->setText("Done!");
 		serial_.Port = serial_.SerialInit(_T("COM5"),115200);
 		ui.pB_connect->setText(QStringLiteral("¶Ï¿ª"));

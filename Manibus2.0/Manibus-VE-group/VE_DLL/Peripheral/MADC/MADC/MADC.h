@@ -5,9 +5,15 @@
 #define MADC_API __declspec(dllexport)
 
 #define ADC_Check          0xFC
-#define ADC_FeedBack       0xA3
 
-#define ADCRIGHT           0xFE
+#define pADCInit__ID       0xC1
+#define pADCDeInit__ID     0xC2
+#define pADCRead__ID       0xC3
+
+#define ADCRIGHT           0xFC
+
+
+
 
 typedef enum {
 
@@ -45,16 +51,33 @@ class MADC_API MADC {
 
 public:
 
-	virtual  std::pair<unsigned short, unsigned char*> ADC_Init(ADCSPEED_Type Speed, ADCCHANNEL_Type *Channel);
-	virtual  std::pair<unsigned short, unsigned char*> ADC_DeInit();
-	virtual  std::pair<unsigned short, unsigned char*> ADC_Read(ADCCHANNEL_Type Channel);
+	MADC();
+	~MADC();
 
-	virtual unsigned char* MADCSerialFeedBack();
-	virtual unsigned char* MADCWifiFeedBack(unsigned char ID);
+	virtual  std::pair<unsigned short, unsigned char*> ADCInit(ADCSPEED_Type Speed, ADCCHANNEL_Type *Channel);
+	virtual  std::pair<unsigned short, unsigned char*> ADCDeInit();
+	virtual  std::pair<unsigned short, unsigned char*> ADCRead(ADCCHANNEL_Type Channel);
+
+	virtual  std::pair<unsigned short, unsigned char*> MADCSerialFeedBack();
+	virtual  std::pair<unsigned short, unsigned char*> MADCWifiFeedBack(unsigned char ID);
+
+	virtual bool ADC_FeedBack(unsigned char ID,unsigned char *Msg);
+	virtual bool ADC_FeedBack(unsigned char ID,unsigned char *Msg, unsigned char* readback);
+
 
 	unsigned char ADC_RIGHT = 0x00;
 
 private:
+
+	unsigned char *sendout_;
+
+	bool ADC_ID_CHECK_ = false;
+	bool ADC_PARAM_CHECK_ = false;
+	bool ADC_CHECK_ = false;
+
+	unsigned char continue_count = 0;
+
+#define  ADC_FBInit()             ADC_ID_CHECK_ = false;ADC_CHECK_  = false;ADC_PARAM_CHECK_ = false;continue_count=0;
 
 #define IS_ADC_SPEED(SPEED)          (((SPEED) == ADC_12MHz) || \
                                      ((SPEED) == ADC_9MHz))
@@ -72,7 +95,7 @@ private:
 
 
 	bool IS_PARAMS(bool JUDGE);
-
+	bool IS_RIGHT(unsigned char param1,unsigned char param2);
 };
 
 

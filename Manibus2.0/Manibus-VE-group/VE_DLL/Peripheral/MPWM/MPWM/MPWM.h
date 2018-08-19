@@ -11,8 +11,8 @@
 #define PWM_pPWMICGetFrequancy  0xDC
 #define PWM_pPWMGetPluse        0xDD
 
-#define PWM_pPWMInit__ID        0xD1
-#define PWM_pPWMICInit__ID      0xD2
+#define pPWMInit__ID            0xD1
+#define pPWMICInit__ID          0xD2
 #define pPWMPluseInit__ID       0xD3
 #define pPWMDeInit__ID          0xD4
 #define pPWMSetPluseWid__ID     0xD5
@@ -87,6 +87,9 @@ class MPWM_API MPWM
 
 public:
 
+	MPWM();
+	~MPWM();
+
 	virtual  std::pair<unsigned short, unsigned char*> PWMInit(PWMTIM_Type TIM, PWMOCCHANNEL_Type *Channel,
 		unsigned short Period,unsigned short Prescalar,unsigned short Pluse);
 	virtual  std::pair<unsigned short, unsigned char*> PWMICInit(PWMTIM_Type TIM, PWMICCHANNEL_Type *Channel);
@@ -101,12 +104,26 @@ public:
 	virtual  std::pair<unsigned short, unsigned char*> PWMGetPluse(PWMTIM_Type TIM, PWM_ENCODERCHANNEL_Type Channel);
 	virtual  std::pair<unsigned short, unsigned char*> PWMSetFrequency(PWMTIM_Type TIM,unsigned short Prescaler);
 
-	virtual unsigned char* MPWMSerialFeedBack();
-	virtual unsigned char* MPWMWifiFeedBack(unsigned char ID);
+	virtual std::pair<unsigned short, unsigned char*> MPWMSerialFeedBack();
+	virtual std::pair<unsigned short, unsigned char*> MPWMWifiFeedBack(unsigned char ID);
+
+	virtual bool PWM_FeedBack(unsigned char ID, unsigned char* Msg);
+	virtual bool PWM_FeedBack(unsigned char ID, unsigned char* Msg, unsigned char* readback);
+
 
 	unsigned char PWM_RIGHT = 0x00;
 
 private:
+
+	unsigned char *sendout_;
+
+	bool PWM_ID_CHECK_ = false;
+	bool PWM_PARAM_CHECK_ = false;
+	bool PWM_CHECK_ = false;
+
+	unsigned char continue_count = 0;
+
+#define PWM_FBInit()    PWM_ID_CHECK_=false;PWM_PARAM_CHECK_= false;PWM_CHECK_=false;continue_count =0;
 
 #define IS_TIM_LIST8_PERIPH(PERIPH)  (((PERIPH) == TIM1) || \
                                       ((PERIPH) == TIM2) || \
@@ -150,6 +167,7 @@ private:
 										((PERIPH) == PWM_Encoder_Channel_6))
 
 	bool IS_PARAMS(bool JUDGE);
+	bool IS_RIGHT(unsigned char param1, unsigned char param2);
 	void s_To_h(const unsigned short *val, unsigned char hex[2] );
 };
 

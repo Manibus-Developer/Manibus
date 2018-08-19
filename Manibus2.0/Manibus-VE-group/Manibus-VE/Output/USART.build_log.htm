@@ -27,14 +27,53 @@ Project File Date:  03/15/2018
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\KEIL_\KEIL\ARM\ARMCC\Bin'
 Build target 'USART'
-"..\..\Output\USART.axf" - 0 Error(s), 0 Warning(s).
+compiling basic_periphfunc.c...
+compiling basic_periphset.c...
+..\..\SETPERIPH\basic_periphset.c(126): warning:  #940-D: missing return statement at end of non-void function "NVICCmd" 
+  }
+..\..\SETPERIPH\basic_periphset.c: 1 warning, 0 errors
+compiling musmart_cho.c...
+..\..\basic\musmart_cho.c(306): warning:  #177-D: variable "shortParam"  was declared but never referenced
+  	  char shortParam[2]={0};
+..\..\basic\musmart_cho.c(307): warning:  #177-D: variable "shortParam_check"  was declared but never referenced
+  		char shortParam_check[3] = {0};
+..\..\basic\musmart_cho.c(843): warning:  #940-D: missing return statement at end of non-void function "cho_pwm" 
+  }
+..\..\basic\musmart_cho.c(975): warning:  #940-D: missing return statement at end of non-void function "cho_iic" 
+  }
+..\..\basic\musmart_cho.c(1066): warning:  #767-D: conversion from pointer to smaller integer
+  				(*(u32(*)())usmart_nametab[26].func)( (char)Tmp_1,(char)Tmp_2);
+..\..\basic\musmart_cho.c(1066): warning:  #767-D: conversion from pointer to smaller integer
+  				(*(u32(*)())usmart_nametab[26].func)( (char)Tmp_1,(char)Tmp_2);
+..\..\basic\musmart_cho.c(1121): warning:  #767-D: conversion from pointer to smaller integer
+  				(*(u32(*)())usmart_nametab[27].func)( (char)Tmp_1,(char)Tmp_2);	
+..\..\basic\musmart_cho.c(1121): warning:  #767-D: conversion from pointer to smaller integer
+  				(*(u32(*)())usmart_nametab[27].func)( (char)Tmp_1,(char)Tmp_2);	
+..\..\basic\musmart_cho.c(1174): warning:  #767-D: conversion from pointer to smaller integer
+  			(*(u32(*)())usmart_nametab[30].func)( (u8)u32_param[0],(char)Tmp_1,(char)Tmp_2);
+..\..\basic\musmart_cho.c(1174): warning:  #767-D: conversion from pointer to smaller integer
+  			(*(u32(*)())usmart_nametab[30].func)( (u8)u32_param[0],(char)Tmp_1,(char)Tmp_2);
+..\..\basic\musmart_cho.c(1286): warning:  #111-D: statement is unreachable
+          break;
+..\..\basic\musmart_cho.c(1407): warning:  #767-D: conversion from pointer to smaller integer
+  			(*(u32(*)())usmart_nametab[29].func)((u8)u32_param[0],(char)Tmp_1,(char)Tmp_2,(u8)u32_param[1]);
+..\..\basic\musmart_cho.c(1407): warning:  #767-D: conversion from pointer to smaller integer
+  			(*(u32(*)())usmart_nametab[29].func)((u8)u32_param[0],(char)Tmp_1,(char)Tmp_2,(u8)u32_param[1]);
+..\..\basic\musmart_cho.c(1424): warning:  #940-D: missing return statement at end of non-void function "cho_wifi" 
+  }
+..\..\basic\musmart_cho.c: 14 warnings, 0 errors
+compiling i2c.c...
+linking...
+Program Size: Code=28424 RO-data=336 RW-data=384 ZI-data=6376  
+FromELF: creating hex file...
+"..\..\Output\USART.axf" - 0 Error(s), 15 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\_USART
   C:\KEIL_\KEIL\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

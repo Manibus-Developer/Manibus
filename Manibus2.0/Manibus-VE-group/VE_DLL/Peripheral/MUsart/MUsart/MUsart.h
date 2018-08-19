@@ -5,14 +5,13 @@
 #define MUSART_API __declspec(dllexport)
 
 #define USART_Check        0xFA
-#define USART_FeedBack     0xA2
 
 
-#define USART_pUsartInit__ID      0xA1
-#define USART_pUsartDeInit__ID    0xA2
-#define USART_pUsartWrite__ID     0xA3
-#define USART_pUsartRead__ID      0xA4
-#define USART_pUsartOnLine__ID    0xA5
+#define pUsartInit__ID      0xA1
+#define pUsartDeInit__ID    0xA2
+#define pUsartWrite__ID     0xA3
+#define pUsartRead__ID      0xA4
+#define pUsartOnLine__ID    0xA5
 
 #define UARTRIGHT           0xFA
 
@@ -72,23 +71,42 @@ typedef enum {
 
 }USARTMODE_Type;
 
-class MUSART {
+class MUSART_API MUSART {
 
 public:
 
-	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartInit(USART_Type Usart, USARTBAUD_Type Baud,
+	MUSART();
+	~MUSART();
+
+	virtual  std::pair<unsigned short, unsigned char*> UsartInit(USART_Type Usart, USARTBAUD_Type Baud,
 		USARTWORDLEN_Type WordLength, USARTSTOPBIT_Type StopBits, USARTPARITY_Type Parity,
 		USARTHFC_Type HFC, USARTMODE_Type Mode, unsigned char MsgMode);
 
-	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartDeInit(USART_Type Usart);
-	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartWrite(USART_Type Usart, unsigned char * Words,unsigned char Length);
-	virtual MUSART_API std::pair<unsigned short, unsigned char*> UsartRead(USART_Type Usart);
+	virtual  std::pair<unsigned short, unsigned char*> UsartDeInit(USART_Type Usart);
+	virtual  std::pair<unsigned short, unsigned char*> UsartWrite(USART_Type Usart, unsigned char * Words,unsigned char Length);
+	virtual  std::pair<unsigned short, unsigned char*> UsartRead(USART_Type Usart);
 
-	virtual MUSART_API unsigned char* UsartOnLine();
+	virtual  std::pair<unsigned short, unsigned char*> UsartOnLine();
+
+	virtual bool USART_FeedBack(unsigned char ID, unsigned char *Msg);
+	virtual bool USART_FeedBack(unsigned char ID, unsigned char *Msg, unsigned char* readback);
+
 
 	unsigned char USART_RIGHT = 0x00;
 
 private:
+
+	unsigned char *sendout_;
+
+	unsigned char reg_msg_length = 0;
+
+	bool USART_ID_CHECK_ = false;
+	bool USART_PARAM_CHECK_ = false;
+	bool USART_CHECK_ = false;
+
+	unsigned char continue_count = 0;
+
+#define  USART_FBInit()             USART_ID_CHECK_ = false;USART_CHECK_  = false;USART_PARAM_CHECK_ = false;continue_count=0;
 
 #define IS_USART_1234_PERIPH(PERIPH) (((PERIPH) == USART2) || \
                                  ((PERIPH) == UART4))
@@ -120,5 +138,8 @@ private:
                                  ((MODE) == USART_Mode_Tx_Rx))
 	bool IS_PARAMS(bool JUDGE);
 	void s_To_h(const unsigned short *val , char hex[2]);
+
+	bool IS_RIGHT(unsigned char param1, unsigned char param2);
+
 };
 

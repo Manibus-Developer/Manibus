@@ -1,7 +1,7 @@
 ﻿  MPWM.cpp
     正在创建库 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MPWM\x64\Release\MPWM.lib 和对象 C:\Users\17973\Desktop\Git_Hub\Manibus\Manibus2.0\Manibus-VE-group\VE_DLL\Peripheral\MPWM\x64\Release\MPWM.exp
   正在生成代码
-  0 of 22 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 25 functions ( 4.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
